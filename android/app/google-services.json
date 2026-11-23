@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "691672067449",
+    "project_id": "event-manager-24fdc",
+    "storage_bucket": "event-manager-24fdc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691672067449:android:7a86dee113df0d9db813a8",
+        "android_client_info": {
+          "package_name": "app.eventpulse.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691672067449-q9hstmeqefj2ld2hp8lh5qp8185jal18.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.eventpulse.android",
+            "certificate_hash": "483b43eb9de882dd11923756679dcd1bed0c2de8"
+          }
+        },
+        {
+          "client_id": "691672067449-77t974d2qnje89n7cd5bci1og45jujfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSuuPjQiabxvhPsNfUmtCVjrNTo4E46og"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691672067449-77t974d2qnje89n7cd5bci1og45jujfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

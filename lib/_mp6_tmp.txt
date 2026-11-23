@@ -1,0 +1,209 @@
+  @override
+  Widget build(BuildContext context) {
+    final showNew = MediaQuery.sizeOf(context).width >= kMediumBreakpoint;
+    return AppPage(
+      bottomPadding: 92,
+      children: [
+        PageHeading(
+          'Templates',
+          'Reusable event structures saved on this device.',
+          eyebrow: 'LIBRARY',
+          action: showNew
+              ? FilledButton.icon(
+                  onPressed: _create,
+                  icon: const Icon(Icons.add_rounded, size: 18),
+                  label: const Text('New template'),
+                )
+              : IconButton(
+                  tooltip: 'Create template',
+                  onPressed: _create,
+                  icon: const Icon(Icons.add_rounded),
+                ),
+        ),
+        const SizedBox(height: 16),
+        if (_templates.isEmpty)
+          EmptyCard(
+            icon: Icons.dashboard_customize_outlined,
+            title: 'No templates yet',
+            subtitle: 'Create a template to reuse its agenda and task list.',
+            action: FilledButton.icon(
+              onPressed: _create,
+              icon: const Icon(Icons.add_rounded),
+              label: const Text('Create template'),
+            ),
+          )
+        else
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final columns = constraints.maxWidth >= 720 ? 2 : 1;
+              final gap = 12.0;
+              final width =
+                  (constraints.maxWidth - gap * (columns - 1)) / columns;
+              return Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  for (final template in _templates)
+                    SizedBox(
+                      width: width,
+                      child: _TemplateCard(
+                        template: template,
+                        onUse: () => widget.onUse(template),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+      ],
+    );
+  }
+}
+
+class _TemplateCard extends StatelessWidget {
+  const _TemplateCard({required this.template, required this.onUse});
+
+  final Map<String, dynamic> template;
+  final VoidCallback onUse;
+
+  @override
+  Widget build(BuildContext context) {
+    final agenda = (template['agendaPresets'] as List? ?? const []).length;
+    final tasks = (template['taskPresets'] as List? ?? const []).length;
+    final description = template['description']?.toString() ?? '';
+    final category = template['category']?.toString();
+    return Panel(
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const IconTile(
+                  icon: Icons.dashboard_customize_outlined,
+                  color: orange,
+                  size: 42,
+                  radius: 13,
+                ),
+                const SizedBox(width: 11),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        template['name']?.toString() ?? 'Template',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: ink,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      if (category != null && category.isNotEmpty) ...[
+                        const SizedBox(height: 3),
+                        Text(
+                          category,
+                          style: const TextStyle(
+                            color: muted,
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (description.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Text(
+                description,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: muted,
+                  fontSize: 12.5,
+                  height: 1.45,
+                ),
+              ),
+            ],
+            const SizedBox(height: 11),
+            Wrap(
+              spacing: 7,
+              runSpacing: 6,
+              children: [
+                _CountChip(
+                  icon: Icons.schedule_rounded,
+                  label: '$agenda agenda',
+                ),
+                _CountChip(
+                  icon: Icons.task_alt_rounded,
+                  label: '$tasks task${tasks == 1 ? '' : 's'}',
+                ),
+              ],
+            ),
+            const SizedBox(height: 13),
+            Row(
+              children: [
+                const Spacer(),
+                OutlinedButton.icon(
+                  onPressed: onUse,
+                  icon: const Icon(Icons.play_arrow_rounded, size: 17),
+                  label: const Text('Use template'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: orange,
+                    side: const BorderSide(color: orangeBorder),
+                    minimumSize: const Size(0, 40),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 13,
+                      vertical: 8,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CountChip extends StatelessWidget {
+  const _CountChip({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: softFill,
+        borderRadius: BorderRadius.circular(AppRadius.pill),
+        border: Border.all(color: line),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 12, color: iconSoft),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              color: mutedStrong,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
